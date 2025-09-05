@@ -1,0 +1,8 @@
+```mermaid
+sequenceDiagram
+    participant Dev
+    participant Baileys
+    Dev->>Baileys: sendMessage(jid, media)
+    Baileys->>Baileys: subir archivo
+    Baileys-->>Dev: confirmación con URL
+```
