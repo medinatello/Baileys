@@ -1,0 +1,8 @@
+```mermaid
+sequenceDiagram
+    participant Dev
+    participant Baileys
+    Dev->>Baileys: sendMessage(jid, contenido)
+    Baileys->>Dev: actualización de presencia
+    Baileys-->>Dev: confirmación de envío
+```

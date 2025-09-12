@@ -1,0 +1,9 @@
+```mermaid
+sequenceDiagram
+    participant Dev
+    participant Baileys
+    Dev->>Baileys: useMultiFileAuthState()
+    Dev->>Baileys: makeWASocket(auth)
+    Baileys-->>Dev: connection.update
+    Baileys-->>Dev: estado abierto
+```
