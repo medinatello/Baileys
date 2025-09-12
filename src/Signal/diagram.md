@@ -6,7 +6,7 @@ Este diagrama de Mermaid ilustra el flujo de trabajo y las interacciones dentro 
 graph TD
     subgraph "Capa de Abstracción de Baileys"
         A[Socket o Utils] -- Llama a --> B(SignalRepository);
-        C[Estado de Autenticación (auth.keys)] -- Provee claves a --> E(signalStorage);
+        C[Estado de Autenticación auth.keys] -- Provee claves a --> E(signalStorage);
     end
 
     subgraph "Módulo Signal (src/Signal)"

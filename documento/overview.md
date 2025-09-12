@@ -10,3 +10,15 @@ La organización principal del código es la siguiente:
 - **Media/**, **proto-extract/** y otros directorios contienen recursos auxiliares y herramientas de desarrollo.
 
 Esta documentación busca facilitar la migración de la biblioteca a otro lenguaje, en particular a Go, describiendo los flujos principales y la tecnología involucrada.
+
+## Flujo general del proyecto
+
+```mermaid
+flowchart TD
+    A[Inicio del cliente] --> B[Obtener credenciales]
+    B --> C[Establecer WebSocket con makeWASocket]
+    C --> D[Recibir eventos]
+    D --> E{Tipo de evento}
+    E -->|Mensajes| F[Procesar y enviar respuesta]
+    E -->|Estado de conexión| G[Reconectar o finalizar]
+```

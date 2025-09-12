@@ -1,9 +1,0 @@
-```mermaid
-flowchart TD
-    A[Inicio del cliente] --> B[Obtener credenciales]
-    B --> C[Establecer WebSocket con makeWASocket]
-    C --> D[Recibir eventos]
-    D --> E{Tipo de evento}
-    E -->|Mensajes| F[Procesar y enviar respuesta]
-    E -->|Estado de conexión| G[Reconectar o finalizar]
-```

@@ -2,6 +2,22 @@
 
 Este diagrama de Mermaid ilustra la interacción de alto nivel entre los principales módulos (carpetas) dentro del directorio `src`.
 
+## Diagrama de arquitectura general
+
+```mermaid
+flowchart LR
+    Index[index.ts] --> Defaults
+    Index --> Signal
+    Index --> Socket
+    Index --> Types
+    Index --> Utils
+    Index --> WABinary
+    Index --> WAM
+    Index --> WAUSync
+```
+
+## Diagrama de flujo detallado
+
 ```mermaid
 graph TD
     subgraph "Capa de Interfaz (Entrada)"
