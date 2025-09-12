@@ -1,38 +1,42 @@
+[🏠 Volver al Índice](../navigation.md)
+
+---
+
 # Diagrama del Directorio `src/WAUSync`
 
 Este diagrama ilustra el flujo de trabajo para realizar una consulta de sincronización de usuario (USync), desde la construcción de la solicitud hasta el procesamiento de la respuesta.
 
 ```mermaid
-graph TD
-    subgraph "Fase 1: Construcción de la Consulta"
-        A[Cliente inicia la sincronización] --> B{new USyncQuery()};
-        B -- .withContactProtocol() --> C[Añade ContactProtocol];
-        B -- .withDeviceProtocol() --> D[Añade DeviceProtocol];
-        B -- .with(...) --> E[...];
-        F[Consulta USync Configurada]
-        C & D & E --> F;
+flowchart TD
+    subgraph FASE1_CONSTRUCCION
+        A[Inicia sincronizacion] --> B[new_USyncQuery]
+        B -- withContactProtocol --> C[Añade_ContactProtocol]
+        B -- withDeviceProtocol --> D[Añade_DeviceProtocol]
+        B -- with_otros --> E[Otros]
+        F[USync_Configurada]
+        C --> F
+        D --> F
+        E --> F
     end
 
-    subgraph "Fase 2: Ejecución"
-        G(Socket Module) -- Envía la consulta a --> H((Servidor WhatsApp));
-        H -- Devuelve respuesta --> G;
+    subgraph FASE2_EJECUCION
+        G[Socket] -- Envia_consulta --> H[Servidor_WhatsApp]
+        H -- Devuelve_respuesta --> G
     end
 
-    subgraph "Fase 3: Procesamiento de la Respuesta"
-        I[Respuesta del Servidor (BinaryNode)] --> J{query.parseUSyncQueryResult()};
-        J -- Delega a --> K(ContactProtocol.parser);
-        J -- Delega a --> L(DeviceProtocol.parser);
-        J -- Delega a --> M(...);
-
-        N[Datos de Contactos Sincronizados]
-        O[Datos de Dispositivos Sincronizados]
-
-        K --> N;
-        L --> O;
+    subgraph FASE3_PROCESAMIENTO
+        I[Respuesta_Servidor] --> J[parseUSyncQueryResult]
+        J -- Delega_a --> K[ContactProtocol_parser]
+        J -- Delega_a --> L[DeviceProtocol_parser]
+        J -- Delega_a --> M[Otros_parser]
+        N[Contactos_Sincronizados]
+        O[Dispositivos_Sincronizados]
+        K --> N
+        L --> O
     end
 
-    F -- Pasa a --> G;
-    G -- Pasa respuesta a --> J;
+    F -- Pasa_a --> G
+    G -- Pasa_respuesta_a --> J
 ```
 
 ## Explicación del Flujo

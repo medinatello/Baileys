@@ -1,54 +1,55 @@
+[🏠 Volver al Índice](../navigation.md)
+
+---
+
 # Diagrama del Directorio `src/Socket`
 
 Este diagrama de Mermaid ilustra la arquitectura en capas y el flujo de control dentro del módulo `Socket`. Muestra cómo se construye el socket y cómo las diferentes partes interactúan para gestionar la comunicación.
 
 ```mermaid
-graph TD
-    subgraph "Capa Pública (Interfaz de Usuario)"
-        A[Cliente Llama a makeWASocket] --> B(Socket/index.ts);
+flowchart TD
+    subgraph CAPA_PUBLICA
+        A[Cliente makeWASocket] --> B[Socket index]
     end
 
-    subgraph "Capas de Construcción del Socket (Fábricas)"
-        B -- Fusiona config y llama a --> C(makeCommunitiesSocket);
-        C -- (y otras capas intermedias) --> D(makeSocket);
+    subgraph CAPAS_CONSTRUCCION
+        B -- Fusiona config --> C[makeCommunitiesSocket]
+        C -- capas intermedias --> D[makeSocket]
     end
 
-    subgraph "Núcleo del Socket (socket.ts)"
-        D -- Crea instancia de --> E(WebSocketClient);
-        D -- Gestiona --> F{Ciclo de Vida de Conexión};
-        D -- Procesa --> G[Nodos Binarios Entrantes];
-        D -- Envía --> H[Nodos Binarios Salientes];
-        D -- Expone API a capas superiores --> I{API de Bajo Nivel (query, sendNode)};
+    subgraph NUCLEO_SOCKET
+        D -- Crea instancia --> E[WebSocketClient]
+        D -- Gestiona --> F[Ciclo Vida Conexion]
+        D -- Procesa --> G[Nodos Binarios Entrantes]
+        D -- Envia --> H[Nodos Binarios Salientes]
+        D -- Expone API --> I[API Bajo Nivel query sendNode]
     end
 
-    subgraph "Cliente WebSocket (Socket/Client)"
-        E -- Envuelve --> J[lib 'ws'];
+    subgraph CLIENTE_WEBSOCKET
+        E -- Envuelve --> J[lib ws]
     end
 
-    subgraph "Módulos de Funcionalidades (Capas Superiores)"
-        K(messages-send.ts);
-        L(messages-recv.ts);
-        M(groups.ts);
-        N(chats.ts);
-        O(...)
+    subgraph MODULOS_FUNCIONALIDADES
+        K[messages-send]
+        L[messages-recv]
+        M[groups]
+        N[chats]
+        O[otros]
     end
 
-    subgraph "Dependencias Externas al Módulo"
-        P[Signal Module];
-        Q[WABinary Module];
-        R[Utils Module];
+    subgraph DEPENDENCIAS_EXTERNAS
+        P[Signal Module]
+        Q[WABinary Module]
+        R[Utils Module]
     end
 
-    %% Conexiones de Flujo
-    I -- Es utilizada por --> K;
-    I -- Es utilizada por --> M;
-    I -- Es utilizada por --> N;
-
-    G -- Desencadena lógica en --> L;
-
-    D -- Utiliza --> P;
-    D -- Utiliza --> Q;
-    D -- Utiliza --> R;
+    I -- Es utilizada por --> K
+    I -- Es utilizada por --> M
+    I -- Es utilizada por --> N
+    G -- Desencadena logica --> L
+    D -- Utiliza --> P
+    D -- Utiliza --> Q
+    D -- Utiliza --> R
 ```
 
 ## Explicación del Diagrama

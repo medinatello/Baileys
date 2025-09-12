@@ -1,3 +1,7 @@
+[🏠 Volver al Índice](./navigation.md)
+
+---
+
 # Diagrama de Flujo del Directorio `src`
 
 Este diagrama de Mermaid ilustra la interacción de alto nivel entre los principales módulos (carpetas) dentro del directorio `src`.
@@ -19,46 +23,45 @@ flowchart LR
 ## Diagrama de flujo detallado
 
 ```mermaid
-graph TD
-    subgraph "Capa de Interfaz (Entrada)"
+flowchart TD
+    subgraph CAPA_INTERFAZ
         A[index.ts]
     end
 
-    subgraph "Capa de Lógica Principal"
-        B(Socket)
-        C(Utils)
+    subgraph CAPA_LOGICA_PRINCIPAL
+        B[Socket]
+        C[Utils]
     end
 
-    subgraph "Capa de Protocolo y Datos"
-        D(WABinary)
-        E(Signal)
-        F(Types)
-        G(WAM & WAUSync)
+    subgraph CAPA_PROTOCOLO_DATOS
+        D[WABinary]
+        E[Signal]
+        F[Types]
+        G[WAM y WAUSync]
     end
 
-    subgraph "Capa de Configuración"
-        H(Defaults)
+    subgraph CAPA_CONFIGURACION
+        H[Defaults]
     end
 
-    %% Conexiones
-    A -- Inicia y expone --> B;
-    A -- Expone --> C;
-    A -- Expone --> F;
+    A -- Inicia y expone --> B
+    A -- Expone --> C
+    A -- Expone --> F
 
-    B -- Utiliza --> D;
-    B -- Utiliza --> E;
-    B -- Utiliza --> C;
-    B -- Utiliza --> G;
-    B -- Se configura con --> H;
+    B -- Utiliza --> D
+    B -- Utiliza --> E
+    B -- Utiliza --> C
+    B -- Utiliza --> G
+    B -- Se configura con --> H
 
-    C -- Utiliza --> D;
-    C -- Utiliza --> E;
+    C -- Utiliza --> D
+    C -- Utiliza --> E
 
-    B -- Depende de --> F;
-    C -- Depende de --> F;
-    D -- Depende de --> F;
-    E -- Depende de --> F;
-    G -- Depende de --> F;
+    B -- Depende de --> F
+    C -- Depende de --> F
+    D -- Depende de --> F
+    E -- Depende de --> F
+    G -- Depende de --> F
 ```
 
 ## Explicación del Diagrama

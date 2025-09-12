@@ -1,3 +1,7 @@
+[🏠 Volver al Índice](../../src/navigation.md) | [📋 Índice de Eventos](./readme.md)
+
+---
+
 # Evento: Creación o Restauración de una Sesión
 
 Este documento describe el flujo de eventos y la lógica involucrada cuando un cliente de Baileys se conecta a WhatsApp, ya sea para iniciar una nueva sesión (requiere QR/código) o para restaurar una sesión existente.
@@ -5,43 +9,43 @@ Este documento describe el flujo de eventos y la lógica involucrada cuando un c
 ## Diagrama de Flujo
 
 ```mermaid
-graph TD
-    subgraph "Cliente"
-        A[Llama a `makeWASocket(config)`] --> B{¿`config.auth` tiene credenciales?};
+flowchart TD
+    subgraph CLIENTE
+        A[Llama a makeWASocket] --> B{¿config.auth tiene credenciales?}
     end
 
-    subgraph "Baileys: Inicialización"
-        B -- Sí --> C[Carga credenciales existentes];
-        B -- No --> D[Prepara para nueva sesión];
-        C --> E(Inicia conexión WebSocket);
-        D --> E;
+    subgraph INICIALIZACION
+        B -- Sí --> C[Carga credenciales]
+        B -- No --> D[Prepara nueva sesión]
+        C --> E[Inicia WebSocket]
+        D --> E
     end
 
-    subgraph "Baileys: Handshake y Conexión"
-        E --> F[1. Handshake de Noise];
-        F --> G{2. Envía Payload de Cliente};
-        G -- Si es nueva sesión --> H[Envía `generateRegistrationNode`];
-        G -- Si es sesión restaurada --> I[Envía `generateLoginNode`];
+    subgraph HANDSHAKE_CONEXION
+        E --> F[Handshake Noise]
+        F --> G[Envía Payload Cliente]
+        G -- Nueva sesión --> H[generateRegistrationNode]
+        G -- Restaurada --> I[generateLoginNode]
     end
 
-    subgraph "Servidor de WhatsApp"
-        J((Servidor WA));
-        H --> J;
-        I --> J;
+    subgraph SERVIDOR_WA
+        J[Servidor WhatsApp]
+        H --> J
+        I --> J
     end
 
-    subgraph "Baileys: Autenticación"
-        J -- Si es nueva sesión --> K[Recibe `pair-device`. Emite QR];
-        J -- Si `pair-device` es exitoso --> L[Recibe `pair-success`. Emite `creds.update`];
-        J -- Si es sesión restaurada --> M[Recibe `success`];
+    subgraph AUTENTICACION
+        J -- Nueva sesión --> K[Recibe pair-device, emite QR]
+        J -- pair-device exitoso --> L[Recibe pair-success, creds.update]
+        J -- Restaurada --> M[Recibe success]
     end
 
-    subgraph "Estado Final"
-        N[Conexión Abierta y Autenticada];
-        L --> O{Emite `connection.update` (isNewLogin: true)};
-        M --> P{Emite `connection.update` (connection: 'open')};
-        O --> N;
-        P --> N;
+    subgraph ESTADO_FINAL
+        N[Conexión abierta y autenticada]
+        L --> O[connection.update_isNewLogin]
+        M --> P[connection.update_open]
+        O --> N
+        P --> N
     end
 ```
 

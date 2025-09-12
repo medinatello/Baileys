@@ -1,34 +1,34 @@
+[🏠 Volver al Índice](../navigation.md)
+
+---
+
 # Diagrama del Directorio `src/WABinary`
 
 Este diagrama ilustra el flujo de datos a través del módulo `WABinary`, mostrando cómo actúa como una capa de traducción entre los objetos `BinaryNode` utilizados por la aplicación y los `Buffers` de bytes que se transmiten por la red.
 
 ```mermaid
-graph TD
-    subgraph "Lógica de la Aplicación (ej. Socket)"
-        A[Objeto BinaryNode a enviar];
-        B[Objeto BinaryNode recibido];
+flowchart TD
+    subgraph LOGICA_APLICACION
+        A[BinaryNode a enviar]
+        B[BinaryNode recibido]
     end
 
-    subgraph "Módulo WABinary"
-        C(encode.ts) -- Utiliza --> E{constants.ts (Tokens)};
-        D(decode.ts) -- Utiliza --> E;
-
-        C -- Serializa --> F[Buffer de Bytes];
-        G[Buffer de Bytes] -- Deserializa --> D;
+    subgraph MODULO_WABINARY
+        C[encode] -- Utiliza --> E[constants Tokens]
+        D[decode] -- Utiliza --> E
+        C -- Serializa --> F[Buffer de Bytes]
+        G[Buffer de Bytes] -- Deserializa --> D
     end
 
-    subgraph "Capa de Transporte (WebSocket)"
-        H[Enviar por WebSocket];
-        I[Recibir de WebSocket];
+    subgraph TRANSPORTE_WEBSOCKET
+        H[Enviar por WebSocket]
+        I[Recibir de WebSocket]
     end
 
-    %% Flujo de Codificación (Envío)
-    A -- 1. Pasa a --> C;
-    F -- 2. Pasa a --> H;
-
-    %% Flujo de Decodificación (Recepción)
-    I -- 3. Pasa a --> G;
-    D -- 4. Devuelve --> B;
+    A -- 1. Pasa a --> C
+    F -- 2. Pasa a --> H
+    I -- 3. Pasa a --> G
+    D -- 4. Devuelve --> B
 ```
 
 ## Explicación del Flujo

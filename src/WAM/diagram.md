@@ -1,26 +1,29 @@
+[🏠 Volver al Índice](../navigation.md)
+
+---
+
 # Diagrama del Directorio `src/WAM`
 
 Este diagrama ilustra el flujo de datos para la codificación de un evento de analítica (WAM), desde la creación de los datos del evento hasta la generación del buffer binario final.
 
 ```mermaid
-graph TD
-    subgraph "Lógica de la Aplicación"
-        A[Creación de Evento de Analítica];
+flowchart TD
+    subgraph LOGICA_APLICACION
+        A[Creacion de Evento Analitica]
     end
 
-    subgraph "Módulo WAM"
-        B(BinaryInfo.ts) -- Define la estructura --> C[Objeto BinaryInfo];
-        D(encode.ts) -- Utiliza --> E{constants.ts (IDs de Eventos y Campos)};
-
-        C -- 1. Es pasado a --> D;
-        D -- 2. Codifica a --> F[Buffer Binario de WAM];
+    subgraph MODULO_WAM
+        B[BinaryInfo] -- Define estructura --> C[Objeto BinaryInfo]
+        D[encode] -- Utiliza --> E[constants IDs Eventos]
+        C -- 1. Es pasado a --> D
+        D -- 2. Codifica a --> F[Buffer Binario WAM]
     end
 
-    subgraph "Módulo Socket"
-        G[Socket] -- 3. Envía el buffer a WhatsApp --> H((Servidor de WhatsApp));
+    subgraph MODULO_SOCKET
+        G[Socket] -- 3. Envia buffer --> H[Servidor WhatsApp]
     end
 
-    A --> C;
+    A --> C
 ```
 
 ## Explicación del Flujo

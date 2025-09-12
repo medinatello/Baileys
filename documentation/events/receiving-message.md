@@ -1,3 +1,7 @@
+[🏠 Volver al Índice](../../src/navigation.md) | [📋 Índice de Eventos](./readme.md)
+
+---
+
 # Evento: Recibir un Mensaje
 
 Este documento describe el flujo de eventos y la lógica involucrada cuando Baileys recibe un mensaje de WhatsApp desde el servidor.
@@ -5,36 +9,38 @@ Este documento describe el flujo de eventos y la lógica involucrada cuando Bail
 ## Diagrama de Flujo
 
 ```mermaid
-graph TD
-    subgraph "Transporte"
-        A((Servidor de WhatsApp)) -- 1. Envía frame binario --> B[WebSocket Recibe Datos];
+
+flowchart TD
+    subgraph TRANSPORTE
+        A[Servidor WhatsApp] -- 1. Frame binario --> B[WebSocket recibe datos]
     end
 
-    subgraph "Baileys: Capa de Socket y Binaria"
-        B --> C{socket.ts: onMessageReceived};
-        C -- 2. Descodifica con Noise --> D[Frame Des-cifrado];
-        D -- 3. Descodifica con WABinary --> E[Objeto BinaryNode];
+    subgraph SOCKET_BINARIA
+        B --> C[onMessageReceived]
+        C -- 2. Noise decode --> D[Frame descifrado]
+        D -- 3. WABinary decode --> E[Objeto BinaryNode]
     end
 
-    subgraph "Baileys: Lógica de Procesamiento"
-        E -- 4. Es un nodo de 'message' --> F{messages-recv.ts};
-        F -- 5. Des-empaqueta el WAMessage --> G[Contenido del Mensaje y Metadatos];
+    subgraph LOGICA_PROCESAMIENTO
+        E -- 4. Nodo 'message' --> F[messages-recv]
+        F -- 5. Desempaqueta WAMessage --> G[Mensaje y metadatos]
     end
 
-    subgraph "Baileys: Capa de Cifrado"
-        G -- 6. Pasa el ciphertext a --> H(SignalRepository);
-        H -- 7. Descifra el contenido --> I[Contenido en Texto Plano];
+    subgraph CAPA_CIFRADO
+        G -- 6. Ciphertext a --> H[SignalRepository]
+        H -- 7. Descifra contenido --> I[Texto plano]
     end
 
-    subgraph "Baileys: Emisión de Evento"
-        I -- 8. Se combina con metadatos --> J[Mensaje Completo y Legible];
-        J -- 9. Se agrupa en un evento --> K{Evento `messages.upsert`};
+    subgraph EMISION_EVENTO
+        I -- 8. Combina metadatos --> J[Mensaje legible]
+        J -- 9. Agrupa evento --> K[messages.upsert]
     end
 
-    subgraph "Capa de Aplicación"
-        L[Cliente escucha `sock.ev.on('messages.upsert', ...)`];
-        K --> L;
+    subgraph APLICACION
+        L[Cliente escucha messages.upsert]
+        K --> L
     end
+
 ```
 
 ## Explicación Detallada del Flujo

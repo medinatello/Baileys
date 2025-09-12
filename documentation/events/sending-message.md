@@ -1,3 +1,7 @@
+[🏠 Volver al Índice](../../src/navigation.md) | [📋 Índice de Eventos](./readme.md)
+
+---
+
 # Evento: Enviar un Mensaje
 
 Este documento describe el flujo de eventos y la lógica involucrada cuando un cliente de Baileys envía un mensaje usando la función `sendMessage`.
@@ -5,36 +9,36 @@ Este documento describe el flujo de eventos y la lógica involucrada cuando un c
 ## Diagrama de Flujo
 
 ```mermaid
-graph TD
-    subgraph "Capa de Aplicación"
-        A[Cliente llama a `sock.sendMessage(jid, content)`];
+flowchart TD
+    subgraph APLICACION
+        A[Cliente llama a sendMessage]
     end
 
-    subgraph "Baileys: Capa de Lógica de Mensajes"
-        B(messages-send.ts) -- 1. Prepara el mensaje --> C[Genera WAMessage completo];
-        C -- Parámetros como `quoted`, `mentions`, etc. --> B;
+    subgraph LOGICA_MENSAJES
+        B[messages-send] -- 1. Prepara mensaje --> C[Genera WAMessage]
+        C -- quoted, mentions, etc. --> B
     end
 
-    subgraph "Baileys: Capa de Cifrado"
-        D(SignalRepository) -- 3. Cifra el contenido --> E[Contenido Cifrado (ciphertext)];
-        C -- 2. Pasa el mensaje a --> D;
+    subgraph CIFRADO
+        D[SignalRepository] -- 3. Cifra contenido --> E[Contenido cifrado]
+        C -- 2. Pasa mensaje --> D
     end
 
-    subgraph "Baileys: Capa de Codificación y Socket"
-        F(socket.ts) -- 4. Construye el BinaryNode --> G{Nodo `message`};
-        E -- Es parte de --> G;
-        G -- 5. Llama a `query` o `sendNode` --> H(WABinary Module);
+    subgraph SOCKET_BINARIO
+        F[socket] -- 4. Construye BinaryNode --> G[Nodo message]
+        E -- Es parte de --> G
+        G -- 5. query/sendNode --> H[WABinary]
     end
 
-    subgraph "Baileys: Capa Binaria"
-        H -- 6. Codifica el nodo a --> I[Buffer Binario];
+    subgraph BINARIO
+        H -- 6. Codifica nodo --> I[Buffer binario]
     end
 
-    subgraph "Transporte"
-        I -- 7. Se envía por WebSocket --> J((Servidor de WhatsApp));
+    subgraph TRANSPORTE
+        I -- 7. Envía por WebSocket --> J[Servidor WhatsApp]
     end
 
-    A --> B;
+    A --> B
 ```
 
 ## Explicación Detallada del Flujo

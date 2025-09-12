@@ -1,35 +1,39 @@
+[🏠 Volver al Índice](../navigation.md)
+
+---
+
 # Diagrama del Directorio `src/Signal`
 
 Este diagrama de Mermaid ilustra el flujo de trabajo y las interacciones dentro del módulo `Signal`, mostrando cómo se maneja el cifrado para mensajes individuales y de grupo.
 
 ```mermaid
-graph TD
-    subgraph "Capa de Abstracción de Baileys"
-        A[Socket o Utils] -- Llama a --> B(SignalRepository);
-        C[Estado de Autenticación auth.keys] -- Provee claves a --> E(signalStorage);
+flowchart TD
+    subgraph CAPA_ABSTRACCION_BAILEYS
+        A[Socket o Utils] -- Llama a --> B[SignalRepository]
+        C[Estado auth.keys] -- Provee claves --> E[signalStorage]
     end
 
-    subgraph "Módulo Signal (src/Signal)"
-        B -- Es creado por --> D(makeLibSignalRepository);
-        D -- Utiliza --> E;
-        D -- Utiliza lógica de --> F(Group/);
-        E -- Actúa como 'store' para --> G[libsignal-node];
-        B -- Para cifrado 1-a-1 --> G;
-        B -- Para cifrado de grupo --> F;
+    subgraph MODULO_SIGNAL
+        B -- Creado por --> D[makeLibSignalRepository]
+        D -- Utiliza --> E
+        D -- Utiliza logica --> F[Group]
+        E -- Store para --> G[libsignal-node]
+        B -- Cifrado 1-a-1 --> G
+        B -- Cifrado grupo --> F
     end
 
-    subgraph "Dependencia Externa"
-        G[libsignal-node];
+    subgraph DEPENDENCIA_EXTERNA
+        G[libsignal-node]
     end
 
-    subgraph "Módulo de Grupo (src/Signal/Group)"
-        F -- Contiene --> H(GroupCipher);
-        F -- Contiene --> I(GroupSessionBuilder);
+    subgraph MODULO_GRUPO
+        F -- Contiene --> H[GroupCipher]
+        F -- Contiene --> I[GroupSessionBuilder]
     end
 
-    B -- decryptMessage / encryptMessage --> G;
-    B -- decryptGroupMessage / encryptGroupMessage --> H;
-    B -- processSenderKeyDistributionMessage --> I;
+    B -- decryptMessage encryptMessage --> G
+    B -- decryptGroupMessage encryptGroupMessage --> H
+    B -- processSenderKeyDistributionMessage --> I
 ```
 
 ## Explicación del Diagrama

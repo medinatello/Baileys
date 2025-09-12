@@ -1,24 +1,27 @@
+[🏠 Volver al Índice](../navigation.md)
+
+---
+
 # Diagrama del Directorio `src/Defaults`
 
 Este diagrama ilustra cómo se estructura y se utiliza el contenido del directorio `Defaults`. Dado que este módulo se compone principalmente de constantes y configuraciones, el "flujo" consiste en la exportación de estos valores para ser consumidos por otras partes del sistema.
 
 ```mermaid
-graph TD
-    subgraph "Directorio Defaults"
-        A[baileys-version.json] -- Contiene la versión --> B(index.ts);
-        B -- Define y exporta --> C{Constantes y Configuración por Defecto};
+flowchart TD
+    subgraph DIRECTORIO_DEFAULTS
+        A[baileys-version.json] -- Contiene version --> B[index.ts]
+        B -- Define y exporta --> C[Constantes y Config Default]
     end
 
-    subgraph "Módulos Consumidores"
-        D(Socket);
-        E(Utils);
-        F(...)
+    subgraph MODULOS_CONSUMIDORES
+        D[Socket]
+        E[Utils]
+        F[Otros]
     end
 
-    C -- Es importado y utilizado por --> D;
-    C -- Es importado y utilizado por --> E;
-    C -- Es importado y utilizado por --> F;
-
+    C -- Importado y utilizado --> D
+    C -- Importado y utilizado --> E
+    C -- Importado y utilizado --> F
 ```
 
 ## Explicación del Diagrama

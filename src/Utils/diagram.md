@@ -1,3 +1,7 @@
+[🏠 Volver al Índice](../navigation.md)
+
+---
+
 # Diagrama del Directorio `src/Utils`
 
 Este diagrama conceptual ilustra el rol del directorio `Utils` como una "caja de herramientas" compartida, de la cual dependen los principales módulos de lógica del proyecto.

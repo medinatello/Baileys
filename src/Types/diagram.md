@@ -1,3 +1,7 @@
+[🏠 Volver al Índice](../navigation.md)
+
+---
+
 # Diagrama del Directorio `src/Types`
 
 Este diagrama es conceptual y muestra el rol del directorio `Types` como una dependencia fundamental y transversal para casi todos los demás módulos del proyecto. No representa un flujo de ejecución, sino un flujo de dependencias.

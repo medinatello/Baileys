@@ -1,53 +1,54 @@
+[🏠 Volver al Índice](../src/navigation.md) | [📋 Índice de Eventos](./events/readme.md)
+
+---
+
 # Diagrama de Flujo del Proyecto
 
 Este documento contiene un diagrama de Mermaid que ilustra el flujo general de la aplicación Baileys, desde la inicialización hasta la interacción con WhatsApp.
 
 ```mermaid
-graph TD
-    subgraph "Fase de Inicialización"
-        A[Cliente inicia la aplicación] --> B(Llama a `makeWASocket` para crear una instancia de socket);
-        B --> C{¿Existe sesión guardada?};
-        C -- Sí --> D[Carga de credenciales desde `authState`];
-        C -- No --> E[Se prepara para nueva conexión];
+flowchart TD
+    subgraph INICIALIZACION
+        A[Inicia aplicación] --> B[makeWASocket]
+        B --> C{¿Sesión guardada?}
+        C -- Sí --> D[Carga credenciales]
+        C -- No --> E[Nueva conexión]
     end
 
-    subgraph "Fase de Conexión y Autenticación"
-        D --> F(Conexión al WebSocket de WhatsApp);
-        E --> F;
-        F --> G{Evento `connection.update`};
-        G -- Conexión abierta --> H{¿Necesita autenticación?};
-        H -- Sí (Nueva sesión) --> I{Mostrar QR o Código de Emparejamiento};
-        I --> J[Usuario escanea/introduce el código];
-        J --> K(Autenticación exitosa);
-        H -- No (Sesión restaurada) --> K;
-        K --> L[Evento `creds.update`: Guarda la nueva sesión/credenciales];
+    subgraph CONEXION_Y_AUTENTICACION
+        D --> F[Conexión WebSocket]
+        E --> F
+        F --> G{connection.update}
+        G -- Abierta --> H{¿Autenticación?}
+        H -- Sí --> I[Mostrar QR/Código]
+        I --> J[Usuario escanea/código]
+        J --> K[Autenticación exitosa]
+        H -- No --> K
+        K --> L[creds.update]
     end
 
-    subgraph "Fase de Operación"
-        L --> M(Conexión establecida y autenticada);
-        M --> N[Escucha de eventos del socket: `messages.upsert`, `groups.update`, etc.];
+    subgraph OPERACION
+        L --> M[Conexión establecida]
+        M --> N[Escucha eventos]
 
-        subgraph "Flujo de Mensaje Entrante"
-            O[Servidor de WhatsApp envía evento] --> N;
-            N -- `messages.upsert` --> P[Procesa y desencripta el mensaje];
-            P --> Q[El cliente recibe el mensaje a través del listener];
-        end
+        O[WhatsApp envía evento] --> N
+        N -- messages.upsert --> P[Procesa y desencripta]
+        P --> Q[Cliente recibe mensaje]
 
-        subgraph "Flujo de Mensaje Saliente"
-            R[Cliente llama a `sock.sendMessage()`] --> S[Prepara y encripta el mensaje];
-            S --> T[Envía el mensaje a través del WebSocket];
-            T --> U[Servidor de WhatsApp procesa y entrega el mensaje];
-        end
+        R[Cliente envía mensaje] --> S[Prepara y encripta]
+        S --> T[Envía por WebSocket]
+        T --> U[WhatsApp entrega mensaje]
     end
 
-    subgraph "Fase de Desconexión"
-        V[Ocurre un error o cierre de conexión] --> W{Evento `connection.update` con estado 'close'};
-        W --> X{¿Fue un cierre de sesión (`loggedOut`)?};
-        X -- Sí --> Y[Fin de la conexión, requiere nuevo QR];
-        X -- No (Error de red, etc.) --> Z[Intenta reconectar automáticamente];
-        Z --> F;
+    subgraph DESCONEXION
+        V[Error o cierre] --> W{connection.update: close}
+        W --> X{¿loggedOut?}
+        X -- Sí --> Y[Fin, requiere nuevo QR]
+        X -- No --> Z[Reconexión automática]
+        Z --> F
     end
 ```
+
 
 ## Explicación del Flujo
 
